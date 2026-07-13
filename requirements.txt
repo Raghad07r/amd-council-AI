@@ -1,0 +1,41 @@
+# requirements.txt — مجلس مستشار أمد للوعي المالي | On-Premise Edition
+# ══════════════════════════════════════════════════════════════════
+# ملاحظة: تم إزالة openai و sse-starlette نهائياً — لا اعتماديات سحابية
+# للاستدلال. البث (SSE) الآن مبني يدوياً عبر StreamingResponse
+# القياسية في FastAPI (انظر sse() في server.py)، فلا حاجة لمكتبة
+# sse-starlette الإضافية.
+# ══════════════════════════════════════════════════════════════════
+
+# ── الخادم وواجهة الويب ──────────────────────────────────────────
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+python-dotenv>=1.0.0
+
+# ── الاستدلال المحلي عبر Ollama ─────────────────────────────────
+# عميل Ollama الرسمي غير المتزامن (AsyncClient) المستخدم مباشرة في
+# server.py للدردشة والتقييم الديناميكي، وفي rag_engine.py للتضمين.
+ollama>=0.4.0
+
+# ── التوجيه التسلسلي متعدد الوكلاء ──────────────────────────────
+langgraph>=0.6.0
+
+# ── إطار RAG وتقسيم النصوص وتحميل PDF (يُستخدم في ingest_data.py) ──
+# langchain: الحزمة الأساسية (تُستخدم بشكل غير مباشر عبر الحزم الفرعية أدناه)
+langchain>=0.3.0
+# langchain-community: يوفّر PyPDFLoader لقراءة ملفات PDF
+langchain-community>=0.3.0
+# langchain-ollama: يوفّر OllamaEmbeddings للتضمين المحلي (nomic-embed-text)
+langchain-ollama>=0.2.0
+# langchain-text-splitters: يوفّر RecursiveCharacterTextSplitter
+langchain-text-splitters>=0.3.0
+# أدوات الوكلاء (@tool decorator) في sandbox/tools.py
+langchain-core>=0.3.0
+
+# ── قاعدة البيانات المتجهة (RAG) ────────────────────────────────
+chromadb>=0.5.0
+
+# ── قراءة ملفات PDF أثناء التغذية (Ingestion) ───────────────────
+pypdf>=5.0.0
+
+# ── بيانات السوق المالي السعودي (أداة نورة) ─────────────────────
+yfinance>=0.2.40

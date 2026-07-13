@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>الإنماء | مجلس أمد المالي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/tabler-icons.min.css">
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ══════════════════════════════════════════════════════════
+       الشاشة الأولى — محاكاة تطبيق بنك الإنماء (الافتراضية)
+  ══════════════════════════════════════════════════════════ -->
+  <section class="screen bank-screen active" id="screen-bank">
+    <div class="phone-frame">
+
+      <!-- شريط الحالة -->
+      <div class="status-bar">
+        <span class="status-time">٩:٤١</span>
+        <div class="status-icons">
+          <i class="ti ti-signal-4g"></i>
+          <i class="ti ti-wifi"></i>
+          <i class="ti ti-battery-4"></i>
+        </div>
+      </div>
+
+      <!-- ترويسة التطبيق -->
+      <header class="bank-header">
+        <div class="bank-user">
+          <div class="bank-avatar">ر</div>
+          <div>
+            <div class="bank-greeting">مساء الخير</div>
+            <div class="bank-username">رغد</div>
+          </div>
+        </div>
+        <button class="bank-icon-btn" aria-label="الإشعارات">
+          <i class="ti ti-bell"></i>
+          <span class="notif-dot"></span>
+        </button>
+      </header>
+
+      <!-- بطاقة الرصيد -->
+      <div class="balance-card">
+        <div class="balance-card-glow"></div>
+        <div class="balance-label">
+          <i class="ti ti-wallet"></i>
+          الرصيد الحالي
+        </div>
+        <div class="balance-amount">
+          <span class="balance-number" id="balance-number">16,197.00</span>
+          <span class="balance-currency">ريال</span>
+        </div>
+        <div class="balance-card-footer">
+          <span class="account-tag">حساب الراتب •••• 4471</span>
+        </div>
+      </div>
+
+      <!-- آخر العمليات -->
+      <div class="transactions-section">
+        <div class="transactions-title">آخر العمليات</div>
+
+        <div class="transactions-list" id="transactions-list">
+          <div class="transaction-row">
+            <div class="tx-icon tx-icon-in"><i class="ti ti-cash-banknote"></i></div>
+            <div class="tx-info">
+              <div class="tx-name">إيداع راتب</div>
+              <div class="tx-date">اليوم — ٩:٠٠ ص</div>
+            </div>
+            <div class="tx-amount tx-in">+20,000</div>
+          </div>
+
+          <div class="transaction-row">
+            <div class="tx-icon tx-icon-out"><i class="ti ti-file-invoice"></i></div>
+            <div class="tx-info">
+              <div class="tx-name">خصم قسط شهري</div>
+              <div class="tx-date">اليوم — ٩:٠٥ ص</div>
+            </div>
+            <div class="tx-amount tx-out">-2,000</div>
+          </div>
+
+          <div class="transaction-row">
+            <div class="tx-icon tx-icon-out"><i class="ti ti-car"></i></div>
+            <div class="tx-info">
+              <div class="tx-name">خصم قسط السيارة</div>
+              <div class="tx-date">اليوم — ٩:٠٦ ص</div>
+            </div>
+            <div class="tx-amount tx-out">-1,000</div>
+          </div>
+
+          <div class="transaction-row">
+            <div class="tx-icon tx-icon-out"><i class="ti ti-coffee"></i></div>
+            <div class="tx-info">
+              <div class="tx-name">مصاريف — قهوة</div>
+              <div class="tx-date">أمس — ٤:١٨ م</div>
+            </div>
+            <div class="tx-amount tx-out">-23</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- مساحة فارغة أسفل حتى لا يغطي الزر العائم العمليات -->
+      <div class="scroll-spacer"></div>
+
+      <!-- الزر العائم — استشارة مجلس أمد -->
+      <button class="council-fab" id="open-council-btn" onclick="openCouncil()">
+        <span class="council-fab-glow"></span>
+        <span class="council-fab-icon">⚖️</span>
+        <span class="council-fab-text">استشارة مجلس أمد الذكي</span>
+      </button>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       الشاشة الثانية — مجلس أمد المالي (واجهة المحادثة)
+  ══════════════════════════════════════════════════════════ -->
+  <section class="screen council-screen" id="screen-council">
+    <div class="council-shell">
+
+      <!-- ترويسة المجلس -->
+      <header class="council-header">
+        <button class="back-to-bank-btn" onclick="openBank()">
+          عودة للبنك <span>🏦</span>
+        </button>
+        <div class="council-header-title">
+          <span class="council-header-name">قروب المستشارين الماليين 💬</span>
+          <span class="council-header-sub">سلمان، نورة، فهد · نشط الآن</span>
+        </div>
+        <div class="council-header-right">
+          <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()" aria-label="تغيير المظهر">
+            <i class="ti ti-sun" id="theme-icon"></i>
+          </button>
+          <div class="council-header-mark"><i class="ti ti-message-chatbot"></i></div>
+        </div>
+      </header>
+
+      <!-- شريط حالة المستشارين والتبويبات التفاعلية -->
+      <div class="advisors-strip">
+        <div class="advisor-chip active" id="chip-chat" onclick="showTab('chat')">
+          <div class="advisor-chip-avatar" style="background: var(--navy); display: flex; align-items: center; justify-content: center;"><i class="ti ti-messages" style="color:#FFF;"></i></div>
+          <div class="advisor-chip-info">
+            <span class="advisor-chip-name">المجلس المشترك</span>
+            <span class="advisor-chip-role">دردشة تفاعلية</span>
+          </div>
+        </div>
+        <div class="advisor-chip" id="chip-planner" onclick="showTab('planner')" style="--c: var(--navy); --c-bg: var(--navy-08);">
+          <div class="advisor-chip-avatar">س</div>
+          <div class="advisor-chip-info">
+            <span class="advisor-chip-name">سلمان</span>
+            <span class="advisor-chip-role">تخطيط مالي</span>
+          </div>
+          <span class="advisor-chip-dot" id="dot-planner"></span>
+        </div>
+        <div class="advisor-chip" id="chip-risk" onclick="showTab('risk')" style="--c: var(--copper); --c-bg: var(--copper-10);">
+          <div class="advisor-chip-avatar">ن</div>
+          <div class="advisor-chip-info">
+            <span class="advisor-chip-name">نورة</span>
+            <span class="advisor-chip-role">تحليل مخاطر</span>
+          </div>
+          <span class="advisor-chip-dot" id="dot-risk"></span>
+        </div>
+        <div class="advisor-chip" id="chip-behavior" onclick="showTab('behavior')" style="--c: var(--lavender-deep); --c-bg: var(--lavender-15);">
+          <div class="advisor-chip-avatar">ف</div>
+          <div class="advisor-chip-info">
+            <span class="advisor-chip-name">فهد</span>
+            <span class="advisor-chip-role">سلوك مالي</span>
+          </div>
+          <span class="advisor-chip-dot" id="dot-behavior"></span>
+        </div>
+      </div>
+
+      <!-- شارة السياق المالي المحقون تلقائياً -->
+      <div class="context-banner">
+        <i class="ti ti-shield-check"></i>
+        بيانات رغد المالية (الدخل، الرصيد، الأقساط) مرفقة تلقائياً مع كل سؤال
+      </div>
+
+      <!-- منطقة الرسائل -->
+      <div class="chat-area" id="chat-area">
+        <div class="welcome-wrap" id="welcome">
+          <div class="welcome-icon">⚖️</div>
+          <h1 class="welcome-title">تفضلي يا رغد</h1>
+          <p class="welcome-desc">
+            المستشارون الثلاثة يعرفون وضعك المالي الحالي مسبقاً —
+            اسأليهم مباشرة دون الحاجة لتكرار أرقامك.
+          </p>
+          <div class="suggestions-grid">
+            <button class="sug" onclick="useSug(this)">
+              <i class="ti ti-piggy-bank"></i>
+              كيف أوزّع راتبي هذا الشهر بأفضل شكل؟
+            </button>
+            <button class="sug" onclick="useSug(this)">
+              <i class="ti ti-chart-line"></i>
+              هل أقدر أستثمر جزءاً من رصيدي الحالي؟
+            </button>
+            <button class="sug" onclick="useSug(this)">
+              <i class="ti ti-alert-triangle"></i>
+              أمر بضائقة مالية وأحتاج تمويلاً عاجلاً
+            </button>
+            <button class="sug" onclick="useSug(this)">
+              <i class="ti ti-coffee"></i>
+              أشعر أني أصرف كثير على القهوة والمطاعم
+            </button>
+          </div>
+        </div>
+        <div id="messages"></div>
+      </div>
+
+      <!-- 📈 واجهة نورة: مركز الاستثمار الذكي -->
+      <div class="dashboard-view" id="dashboard-risk" style="display: none;">
+        <div class="db-header">
+          <div class="db-title-wrap">
+            <h2 class="db-title">📈 مركز الاستثمار الذكي — نورة</h2>
+            <p class="db-subtitle">إدارة وتخصيص محفظتك الاستثمارية وتفعيل الأوامر الشرعية المباشرة.</p>
+          </div>
+          <div class="db-balance-badge">
+            <span class="db-badge-label">القوة الشرائية الحالية</span>
+            <span class="db-badge-val" id="db-balance-risk">16,197 ريال</span>
+          </div>
+        </div>
+
+        <div class="db-grid">
+          <!-- محفظة النمو -->
+          <div class="db-card">
+            <div class="db-card-header h-growth">
+              <i class="ti ti-flame"></i> محفظة النمو المتسارع (عالية المخاطر / عائد ممتاز)
+            </div>
+            <div class="db-card-body">
+              <div class="stock-row">
+                <div class="stock-details">
+                  <span class="stock-name">سهم شركة علم</span>
+                  <span class="stock-ticker">7203.SR</span>
+                </div>
+                <div class="stock-price-info">
+                  <span class="stock-price">795.00 ريال</span>
+                  <span class="stock-change price-up"><i class="ti ti-trending-up"></i> +1.53%</span>
+                </div>
+                <button class="stock-action-btn" onclick="openOrderModal('7203', 'علم', 795.00)">شراء فوري</button>
+              </div>
+              <div class="stock-row">
+                <div class="stock-details">
+                  <span class="stock-name">سهم مجموعة تداول السعودية</span>
+                  <span class="stock-ticker">1111.SR</span>
+                </div>
+                <div class="stock-price-info">
+                  <span class="stock-price">165.40 ريال</span>
+                  <span class="stock-change price-up"><i class="ti ti-trending-up"></i> +0.85%</span>
+                </div>
+                <button class="stock-action-btn" onclick="openOrderModal('1111', 'تداول', 165.40)">شراء فوري</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- محفظة العوائد -->
+          <div class="db-card">
+            <div class="db-card-header h-income">
+              <i class="ti ti-piggy-bank"></i> محفظة العوائد المستقرة (مخاطر منخفضة / توزيعات دورية)
+            </div>
+            <div class="db-card-body">
+              <div class="stock-row">
+                <div class="stock-details">
+                  <span class="stock-name">سهم مصرف الإنماء</span>
+                  <span class="stock-ticker">1150.SR</span>
+                </div>
+                <div class="stock-price-info">
+                  <span class="stock-price">31.85 ريال</span>
+                  <span class="stock-change price-up"><i class="ti ti-trending-up"></i> +1.43%</span>
+                </div>
+                <button class="stock-action-btn" onclick="openOrderModal('1150', 'الإنماء', 31.85)">شراء فوري</button>
+              </div>
+              <div class="stock-row">
+                <div class="stock-details">
+                  <span class="stock-name">سهم أرامكو السعودية</span>
+                  <span class="stock-ticker">2222.SR</span>
+                </div>
+                <div class="stock-price-info">
+                  <span class="stock-price">29.30 ريال</span>
+                  <span class="stock-change price-up"><i class="ti ti-trending-up"></i> +0.51%</span>
+                </div>
+                <button class="stock-action-btn" onclick="openOrderModal('2222', 'أرامكو', 29.30)">شراء فوري</button>
+              </div>
+              <div class="stock-row">
+                <div class="stock-details">
+                  <span class="stock-name">سهم شركة الاتصالات (stc)</span>
+                  <span class="stock-ticker">7010.SR</span>
+                </div>
+                <div class="stock-price-info">
+                  <span class="stock-price">38.60 ريال</span>
+                  <span class="stock-change price-down"><i class="ti ti-trending-down"></i> -0.26%</span>
+                </div>
+                <button class="stock-action-btn" onclick="openOrderModal('7010', 'stc', 38.60)">شراء فوري</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- محفظة متوازنة -->
+          <div class="db-card">
+            <div class="db-card-header h-balanced">
+              <i class="ti ti-chart-arrows"></i> محفظة متوازنة (نمو مع توزيعات - مخاطر متوسطة)
+            </div>
+            <div class="db-card-body">
+              <div class="stock-row">
+                <div class="stock-details">
+                  <span class="stock-name">سهم سابك</span>
+                  <span class="stock-ticker">2010.SR</span>
+                </div>
+                <div class="stock-price-info">
+                  <span class="stock-price">76.50 ريال</span>
+                  <span class="stock-change price-down"><i class="ti ti-trending-down"></i> -0.80%</span>
+                </div>
+                <button class="stock-action-btn" onclick="openOrderModal('2010', 'سابك', 76.50)">شراء فوري</button>
+              </div>
+              <div class="stock-row">
+                <div class="stock-details">
+                  <span class="stock-name">سهم البنك الأهلي السعودي</span>
+                  <span class="stock-ticker">1180.SR</span>
+                </div>
+                <div class="stock-price-info">
+                  <span class="stock-price">35.40 ريال</span>
+                  <span class="stock-change price-down"><i class="ti ti-trending-down"></i> -0.30%</span>
+                </div>
+                <button class="stock-action-btn" onclick="openOrderModal('1180', 'البنك الأهلي السعودي', 35.40)">شراء فوري</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- محفظة الادخار والصكوك -->
+          <div class="db-card">
+            <div class="db-card-header h-savings">
+              <i class="ti ti-shield-lock"></i> محفظة الادخار والصكوك (أمان رأس المال - مخاطر منخفضة جداً)
+            </div>
+            <div class="db-card-body">
+              <div class="stock-row">
+                <div class="stock-details">
+                  <span class="stock-name">صكوك صح الحكومية</span>
+                  <span class="stock-ticker">SAH.SR</span>
+                </div>
+                <div class="stock-price-info">
+                  <span class="stock-price">100.00 ريال</span>
+                  <span class="stock-change price-up"><i class="ti ti-trending-up"></i> 0.00%</span>
+                </div>
+                <button class="stock-action-btn" onclick="openOrderModal('SAH', 'صكوك صح الحكومية', 100.00)">شراء فوري</button>
+              </div>
+              <div class="stock-row">
+                <div class="stock-details">
+                  <span class="stock-name">صناديق المرابحة بالريال السعودي</span>
+                  <span class="stock-ticker">MURABAHA.SR</span>
+                </div>
+                <div class="stock-price-info">
+                  <span class="stock-price">10.00 ريال</span>
+                  <span class="stock-change price-up"><i class="ti ti-trending-up"></i> +0.05%</span>
+                </div>
+                <button class="stock-action-btn" onclick="openOrderModal('MURABAHA', 'صناديق المرابحة بالريال السعودي', 10.00)">شراء فوري</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- مودال الشراء المشروط التفاعلي -->
+        <div class="db-modal" id="order-modal" style="display: none;">
+          <div class="db-modal-content">
+            <div class="db-modal-header">
+              <h3><i class="ti ti-wallet"></i> تنفيذ أمر شراء أسهم الإنماء الاستثمارية</h3>
+              <button class="close-modal-btn" onclick="closeOrderModal()"><i class="ti ti-x"></i></button>
+            </div>
+            <div class="db-modal-body">
+              <p style="font-size:12.5px;margin-bottom:12px;">أنت بصدد محاكاة تنفيذ أمر شراء فوري للأسهم عبر محفظتك الاستثمارية في مصرف الإنماء.</p>
+              <div class="modal-form-row">
+                <span class="modal-label">الشركة المحددة:</span>
+                <span class="modal-val-bold" id="modal-stock-name">علم (7203)</span>
+              </div>
+              <div class="modal-form-row">
+                <span class="modal-label">سعر السهم الحالي:</span>
+                <span class="modal-val" id="modal-stock-price">795 ريال</span>
+              </div>
+              <div class="modal-form-row">
+                <span class="modal-label">كمية الأسهم:</span>
+                <input type="number" value="10" min="1" id="modal-quantity" oninput="calcTotalOrder()" class="modal-input" />
+              </div>
+              <div class="modal-form-row total-row">
+                <span class="modal-label">القيمة الإجمالية التقريبية:</span>
+                <span class="modal-val-bold color-gold" id="modal-total-price">7,950 ريال</span>
+              </div>
+              <button class="modal-submit-btn" onclick="executeStockPurchase()">تأكيد وإرسال الأمر للمحفظة</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🏦 واجهة فهد: بوابة التمويل الرقمي -->
+      <div class="dashboard-view" id="dashboard-behavior" style="display: none;">
+        <div class="db-header">
+          <div class="db-title-wrap">
+            <h2 class="db-title">🏦 بوابة التمويل الرقمي — فهد</h2>
+            <p class="db-subtitle">حلول التمويل الشخصي والسكني والتأجيري المطابقة للشريعة من مصرف الإنماء.</p>
+          </div>
+        </div>
+
+        <div class="db-grid">
+          <!-- حاسبة التمويل الشخصي -->
+          <div class="db-card col-span-2">
+            <div class="db-card-header h-finance">
+              <i class="ti ti-calculator"></i> حاسبة التمويل الشخصي المرن الفورية
+            </div>
+            <div class="db-card-body calc-layout">
+              <div class="calc-inputs">
+                <div class="calc-input-group">
+                  <div class="calc-label-row">
+                    <label>الراتب الشهري (شريك الإنماء)</label>
+                    <span>20,000 ريال</span>
+                  </div>
+                  <input type="range" min="5000" max="50000" value="20000" disabled class="calc-slider" />
+                </div>
+                <div class="calc-input-group">
+                  <div class="calc-label-row">
+                    <label>مبلغ التمويل المطلوب</label>
+                    <span id="loan-amount-val">50,000 ريال</span>
+                  </div>
+                  <input type="range" min="10000" max="250000" step="5000" value="50000" id="loan-amount-slider" oninput="calcFinance()" class="calc-slider" />
+                </div>
+                <div class="calc-input-group">
+                  <div class="calc-label-row">
+                    <label>مدة التمويل (بالأشهر)</label>
+                    <span id="loan-months-val">60 شهراً</span>
+                  </div>
+                  <input type="range" min="12" max="60" step="12" value="60" id="loan-months-slider" oninput="calcFinance()" class="calc-slider" />
+                </div>
+              </div>
+
+              <div class="calc-results">
+                <div class="result-box">
+                  <span class="res-label">معدل النسبة السنوي (APR)</span>
+                  <span class="res-val" style="color: #2ECC71;">3.99%</span>
+                </div>
+                <div class="result-box">
+                  <span class="res-label">القسط الشهري التقريبي</span>
+                  <span class="res-val color-gold" id="calc-monthly-installment">1,125 ريال</span>
+                </div>
+                <div class="result-box">
+                  <span class="res-label">الحد الأقصى للاستقطاع (سمة)</span>
+                  <span class="res-val">33% (6,600 ريال)</span>
+                </div>
+                <button class="loan-action-btn" onclick="submitDashboardLoan()">تقديم طلب التمويل وتوقيع العقد</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- عروض التمويل الأخرى -->
+          <div class="db-card">
+            <div class="db-card-header">
+              <i class="ti ti-home"></i> تمويل السكن المالي (العقاري)
+            </div>
+            <div class="db-card-body text-center">
+              <p style="font-size:12px;opacity:0.85;margin-bottom:12px;line-height:1.6;">تمويل سكني متكامل يصل لـ 500,000 ريال بنسب ربحية مدعومة ومتوافقة بالكامل مع الشريعة الإسلامية لبناء أو شراء منزلك.</p>
+              <button class="btn-outline-gold" onclick="alert('تم إرسال اهتمامك بتمويل السكن لمستشاري الإنماء!')">طلب تفاصيل التمويل</button>
+            </div>
+          </div>
+
+          <div class="db-card">
+            <div class="db-card-header">
+              <i class="ti ti-car"></i> التمويل التأجيري للسيارات
+            </div>
+            <div class="db-card-body text-center">
+              <p style="font-size:12px;opacity:0.85;margin-bottom:12px;line-height:1.6;">احصل على سيارتك المفضلة بقسط شهري ميسر يُستقطع تلقائياً من الفائض الشهري مع خيار التملك النهائي بعد سداد الدفعة الأخيرة.</p>
+              <button class="btn-outline-gold" onclick="alert('تم إرسال اهتمامك بالتمويل التأجيري لمستشاري الإنماء!')">طلب تفاصيل التمويل</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 📊 واجهة سلمان: لوحة الميزانية والادخار -->
+      <div class="dashboard-view" id="dashboard-planner" style="display: none;">
+        <div class="db-header">
+          <div class="db-title-wrap">
+            <h2 class="db-title">📊 الميزانية والتوقعات المستقبلية — سلمان</h2>
+            <p class="db-subtitle">تحليل هيكلية ميزانيتك الشهرية وتوقع مستويات الفائض والادخار على المدى الطويل.</p>
+          </div>
+        </div>
+
+        <div class="db-grid">
+          <!-- رسم بياني دائري لتوزيع الراتب -->
+          <div class="db-card">
+            <div class="db-card-header h-budget">
+              <i class="ti ti-chart-pie"></i> هيكلة ميزانية الراتب الشهري (20,000 ريال)
+            </div>
+            <div class="db-card-body chart-container-box">
+              <canvas id="budgetPieChart"></canvas>
+            </div>
+          </div>
+
+          <!-- رسم بياني خطي لتراكم الفائض -->
+          <div class="db-card col-span-2">
+            <div class="db-card-header h-forecast">
+              <i class="ti ti-chart-arrows"></i> توقع الفائض المالي والادخار المتراكم لـ 12 شهراً القادمة
+            </div>
+            <div class="db-card-body chart-container-box">
+              <canvas id="surplusLineChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- حقل الإدخال -->
+      <div class="input-wrap">
+        <div class="input-box">
+          <textarea
+            id="user-input"
+            placeholder="اكتبي سؤالك المالي هنا... (Shift+Enter لسطر جديد)"
+            rows="1"
+            onkeydown="handleKey(event)"
+            oninput="autoResize(this)"
+          ></textarea>
+          <button class="send-btn" id="send-btn" onclick="sendMessage()">
+            <i class="ti ti-send-2"></i>
+          </button>
+        </div>
+        <div class="input-hint">معالجة محلية بالكامل · بياناتك لا تغادر الخادم</div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

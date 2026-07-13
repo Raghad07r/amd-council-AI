@@ -1,0 +1,18 @@
+node_modules/
+.env
+.env.local
+*.log
+.DS_Store
+.vscode/
+
+# ── مخرجات تُولَّد محلياً — لا تُرفع لنظام التحكم بالإصدارات ──
+chroma_store/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ملفات PDF الفعلية للمطور تبقى محلية (المجلدات نفسها محفوظة عبر .gitkeep)
+data/planner_docs/*.pdf
+data/risk_docs/*.pdf
+data/behavior_docs/*.pdf
