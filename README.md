@@ -1,10 +1,4 @@
-إليك كود الـ **README.md** الكامل والمصحح بنسبة 100%، تم دمج جميع التعديلات الأخيرة، وتنظيف التداخلات وحل مشاكل الـ Mermaid والـ Markdown ليظهر بشكل مثالي ومنسق على GitHub.
 
-يمكنك نسخ النص أدناه بالكامل واستبدال ملفك الحالي به:
-
----
-
-```markdown
 # 💼 مجلس أمد للوعي المالي — AMD Financial Council
 ### 🤖 On-Premise Hybrid Multi-Agent Social FinTech Platform
 
